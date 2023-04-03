@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Datamweb\ShieldOAuth\Libraries;
 
 use Datamweb\ShieldOAuth\Libraries\Basic\AbstractOAuth;
+use Exception;
 
 class GithubOAuth extends AbstractOAuth
 {
@@ -22,6 +23,11 @@ class GithubOAuth extends AbstractOAuth
     public static $API_USER_INFO_URL = 'https://api.github.com/user';
     private static $APPLICATION_NAME = 'ShieldOAuth';
     protected string $token;
+    protected $client;
+    protected $config;
+    protected string $client_id;
+    protected string $client_secret;
+    protected string $callback_url;
 
     public function __construct(string $token = '')
     {
@@ -29,14 +35,14 @@ class GithubOAuth extends AbstractOAuth
         $this->client = \Config\Services::curlrequest();
 
         $this->config        = config('ShieldOAuthConfig');
-        $this->callbake_url  = base_url('oauth/' . $this->config->call_back_route);
+        $this->callback_url  = base_url('oauth/' . $this->config->call_back_route);
         $this->client_id     = $this->config->oauthConfigs['github']['client_id'];
         $this->client_secret = $this->config->oauthConfigs['github']['client_secret'];
     }
 
     public function makeGoLink(string $state): string
     {
-        return $redirectUrl = self::$API_CODE_URL . "?client_id={$this->client_id}&redirect_uri={$this->callbake_url}&scope=user%3Aemail&response_type=code&state={$state}";
+        return $redirectUrl = self::$API_CODE_URL . "?client_id={$this->client_id}&redirect_uri={$this->callback_url}&scope=user%3Aemail&response_type=code&state={$state}";
     }
 
     protected function fetchAccessTokenWithAuthCode(array $allGet): void
@@ -48,7 +54,7 @@ class GithubOAuth extends AbstractOAuth
                     'client_id'     => $this->client_id,
                     'client_secret' => $this->client_secret,
                     'code'          => $allGet['code'],
-                    'redirect_uri'  => $this->callbake_url,
+                    'redirect_uri'  => $this->callback_url,
                     'grant_type'    => 'authorization_code',
                 ],
                 'headers' => [

@@ -37,6 +37,7 @@ declare(strict_types=1);
 namespace App\Libraries\ShieldOAuth;
 
 use Datamweb\ShieldOAuth\Libraries\Basic\AbstractOAuth;
+use Exception;
 
 class YahooOAuth extends AbstractOAuth
 {
@@ -47,9 +48,11 @@ class YahooOAuth extends AbstractOAuth
     static private $APPLICATION_NAME  = 'ShieldOAuth';
 
     protected string $token;
+    protected $client;
+    protected $config;
     protected string $client_id;
     protected string $client_secret;
-    protected string $callbake_url;
+    protected string $callback_url;
 
     public function __construct(string $token = '')
     {
@@ -57,14 +60,14 @@ class YahooOAuth extends AbstractOAuth
         $this->client = \Config\Services::curlrequest();
 
         $this->config        = config('ShieldOAuthConfig');
-        $this->callbake_url  = base_url('oauth/' . $this->config->call_back_route);
+        $this->callback_url  = base_url('oauth/' . $this->config->call_back_route);
         $this->client_id     = $this->config->oauthConfigs['yahoo']['client_id'];
         $this->client_secret = $this->config->oauthConfigs['yahoo']['client_secret'];
     }
 
     public function makeGoLink(string $state): string
     {
-        $yahooURL= self::$API_CODE_URL."?response_type=code&client_id={$this->client_id}&redirect_uri={$this->callbake_url}&state={$state}";
+        $yahooURL= self::$API_CODE_URL."?response_type=code&client_id={$this->client_id}&redirect_uri={$this->callback_url}&state={$state}";
 
         return $yahooURL;
     }
@@ -79,7 +82,7 @@ class YahooOAuth extends AbstractOAuth
                 'form_params' => [
                         'client_id' => $this->client_id ,
                         'client_secret' => $this->client_secret ,
-                        'redirect_uri' => $this->callbake_url,
+                        'redirect_uri' => $this->callback_url,
                         'code' => $allGet['code'],
                         'grant_type' => 'authorization_code'
                 ],
