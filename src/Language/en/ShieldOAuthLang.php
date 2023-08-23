@@ -27,13 +27,12 @@ return [
 
     // Errors List For all OAuth
     'Github' => [
-        'github'    => 'Github',
+        'github'    => 'GitHub',
         'not_allow' => "Now you can't login or register with GitHub!",
     ],
     'Google' => [
         'google'    => 'Google',
         'not_allow' => "Now you can't login or register with Google!",
-
     ],
     // 'Yahoo' => [
     //     'yahoo'     => 'Yahoo',
