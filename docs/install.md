@@ -30,11 +30,11 @@ composer require datamweb/shield-oauth:dev-main
 > 
 >```php     
 > public $psr4 = [
-> // add this line
-> 'Datamweb\ShieldOAuth' => APPPATH . 'ThirdParty/shield-oauth/src',
+>     // add this line
+>     'Datamweb\ShieldOAuth' => APPPATH . 'ThirdParty/shield-oauth/src',
 > ];
 > ``` 
-> to the `app\Config\Autoload.php` file, however we do not recommend this. Please use the Composer.
+> to the `app/Config/Autoload.php` file, however we do not recommend this. Please use the Composer.
 
 ## Add Required Columns
 
@@ -60,8 +60,8 @@ php spark migrate -n Datamweb\ShieldOAuth
 ```php 
 public array $usersColumnsName = [
     'first_name' => 'first_name',
-    'last_name' => 'last_name',
-    'avatar' => 'avatar',
+    'last_name'  => 'last_name',
+    'avatar'     => 'avatar',
 ];
 ```
 
@@ -96,12 +96,12 @@ You can see [How To Get Keys](get_keys.md) for instructions on how to get the ke
 ```php
 public array $oauthConfigs = [
     'github' => [
-            'client_id' => '8441sgsgsgsgshfgjgykgub08b6',
+            'client_id'     => '8441sgsgsgsgshfgjgykgub08b6',
             'client_secret' => '2336fsdgdfgdfgdfghfdhfghdhdhdhdhd',
             // ...
     ],
     'google' => [
-            'client_id' => '95040vghjhjghjgjgj.apps.googleusercontent.com',
+            'client_id'     => '95040vghjhjghjgjgj.apps.googleusercontent.com',
             'client_secret' => 'fsdfsdfsgdgrdg',
         // ...
     ],
@@ -116,7 +116,7 @@ http://localhost:8080/oauth/github
 http://localhost:8080/oauth/yahoo
 <!-- and other OAuth !>
 ```
-However, `Shield OAuth` suggests the following for ease of use. By adding the following commands to the `vendor\codeigniter4\shield\src\Views\login.php` and `vendor\codeigniter4\shield\src\Views\register.php` file, `Shield OAuth` will automatically display all the OAuth you provide as buttons in login/register views.
+However, `Shield OAuth` suggests the following for ease of use. By adding the following commands to the `vendor/codeigniter4/shield/src/Views/login.php` and `vendor/codeigniter4/shield/src/Views/register.php` file, `Shield OAuth` will automatically display all the OAuth you provide as buttons in login/register views.
 
 ```html
 {{ShieldOAuthButtonForLoginPage}}
@@ -135,11 +135,11 @@ Because we have used Bootstrap to make the dropdown button, you need to add the 
 ```
 
 > **Note**
-> When you create a new class in path `app\Libraries\ShieldOAuth`, for example `YahooOAuth.php`, you will have a new link as below, this is done automatically and there is no need to add code and perform special instructions.
+> When you create a new class in path `app/Libraries/ShieldOAuth/`, for example `YahooOAuth.php`, you will have a new link as below, this is done automatically and there is no need to add code and perform special instructions.
 >
 > ```html
 > http://localhost:8080/oauth/yahoo
 > ```
 
 > **Warning**
-> The two views `vendor\codeigniter4\shield\src\Views\login.php` and `vendor\codeigniter4\shield\src\Views\register.php` are the main files of `Shield`, we have included them in order to make the **documentation understandable**, you should definitely use custom views.
+> The two views `vendor/codeigniter4/shield/src/Views/login.php` and `vendor/codeigniter4/shield/src/Views/register.php` are the main files of `Shield`, we have included them in order to make the **documentation understandable**, you should definitely use custom views.
