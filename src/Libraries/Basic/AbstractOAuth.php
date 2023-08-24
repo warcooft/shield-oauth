@@ -15,6 +15,8 @@ namespace Datamweb\ShieldOAuth\Libraries\Basic;
 
 abstract class AbstractOAuth
 {
+    protected string $token;
+
     abstract protected function makeGoLink(string $state): string;
 
     abstract protected function fetchAccessTokenWithAuthCode(array $allGet): void;

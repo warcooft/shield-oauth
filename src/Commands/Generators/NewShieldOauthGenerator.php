@@ -70,10 +70,8 @@ class NewShieldOauthGenerator extends BaseCommand
 
     /**
      * Path to the app folder
-     *
-     * @var string
      */
-    protected $distPath = APPPATH;
+    protected string $distPath = APPPATH;
 
     /**
      * The ContentReplacer class
