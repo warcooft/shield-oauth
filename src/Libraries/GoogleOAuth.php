@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Datamweb\ShieldOAuth\Libraries;
 
+use CodeIgniter\HTTP\CURLRequest;
 use Config\Services;
 use Datamweb\ShieldOAuth\Libraries\Basic\AbstractOAuth;
 use Exception;
@@ -24,8 +25,8 @@ class GoogleOAuth extends AbstractOAuth
     private static string $API_USER_INFO_URL = 'https://www.googleapis.com/oauth2/v3/userinfo';
     private static string $APPLICATION_NAME  = 'ShieldOAuth';
     protected string $token;
-    protected $client;
-    protected $config;
+    protected CURLRequest $client;
+    protected ?object $config = null;
     protected string $client_id;
     protected string $client_secret;
     protected string $callback_url;
@@ -93,7 +94,7 @@ class GoogleOAuth extends AbstractOAuth
     protected function setColumnsName(string $nameOfProcess, $userInfo): array
     {
         if ($nameOfProcess === 'syncingUserInfo') {
-            $usersColumnsName = [
+            return [
                 $this->config->usersColumnsName['first_name'] => $userInfo->name,
                 $this->config->usersColumnsName['last_name']  => $userInfo->family_name,
                 $this->config->usersColumnsName['avatar']     => $userInfo->picture,
@@ -101,7 +102,7 @@ class GoogleOAuth extends AbstractOAuth
         }
 
         if ($nameOfProcess === 'newUser') {
-            $usersColumnsName = [
+            return [
                 // users tbl                                    // OAuth
                 'username'                                    => $userInfo->given_name,
                 'email'                                       => $userInfo->email,
@@ -113,6 +114,6 @@ class GoogleOAuth extends AbstractOAuth
             ];
         }
 
-        return $usersColumnsName;
+        return [];
     }
 }

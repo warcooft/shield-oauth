@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Datamweb\ShieldOAuth\Libraries;
 
+use CodeIgniter\HTTP\CURLRequest;
 use Config\Services;
 use Datamweb\ShieldOAuth\Libraries\Basic\AbstractOAuth;
 use Exception;
@@ -24,8 +25,8 @@ class GithubOAuth extends AbstractOAuth
     public static string $API_USER_INFO_URL = 'https://api.github.com/user';
     private static string $APPLICATION_NAME = 'ShieldOAuth';
     protected string $token;
-    protected $client;
-    protected $config;
+    protected CURLRequest $client;
+    protected ?object $config = null;
     protected string $client_id;
     protected string $client_secret;
     protected string $callback_url;
@@ -93,7 +94,7 @@ class GithubOAuth extends AbstractOAuth
     protected function setColumnsName(string $nameOfProcess, $userInfo): array
     {
         if ($nameOfProcess === 'syncingUserInfo') {
-            $usersColumnsName = [
+            return [
                 $this->config->usersColumnsName['first_name'] => $userInfo->name,
                 $this->config->usersColumnsName['last_name']  => $userInfo->name,
                 $this->config->usersColumnsName['avatar']     => $userInfo->avatar_url,
@@ -101,7 +102,7 @@ class GithubOAuth extends AbstractOAuth
         }
 
         if ($nameOfProcess === 'newUser') {
-            $usersColumnsName = [
+            return [
                 'username'                                    => $userInfo->login,
                 'email'                                       => $userInfo->email,
                 'password'                                    => random_string('crypto', 32),
@@ -112,6 +113,6 @@ class GithubOAuth extends AbstractOAuth
             ];
         }
 
-        return $usersColumnsName;
+        return [];
     }
 }
