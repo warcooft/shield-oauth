@@ -15,6 +15,7 @@ namespace Datamweb\ShieldOAuth\Libraries;
 
 use CodeIgniter\HTTP\CURLRequest;
 use Config\Services;
+use Datamweb\ShieldOAuth\Config\ShieldOAuthConfig;
 use Datamweb\ShieldOAuth\Libraries\Basic\AbstractOAuth;
 use Exception;
 
@@ -26,7 +27,7 @@ class GoogleOAuth extends AbstractOAuth
     private static string $APPLICATION_NAME  = 'ShieldOAuth';
     protected string $token;
     protected CURLRequest $client;
-    protected ?object $config = null;
+    protected ShieldOAuthConfig $config;
     protected string $client_id;
     protected string $client_secret;
     protected string $callback_url;
