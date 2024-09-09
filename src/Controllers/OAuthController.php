@@ -23,6 +23,8 @@ class OAuthController extends BaseController implements ControllersInterface
 {
     private const ACCESS_DENIED = 'access_denied';
 
+    private ?User $userExist = null;
+
     public function redirectOAuth(string $oauthName): RedirectResponse
     {
         // if user login
@@ -89,10 +91,7 @@ class OAuthController extends BaseController implements ControllersInterface
             $updateFields = $oauthClass->getColumnsName('syncingUserInfo', $userInfo);
 
             $userid = $this->syncingUserInfo($find, $updateFields);
-        }
-
-        // Create new user if credentials not exist or let users register themselves
-        if ($this->checkExistenceUser($find) === false) {
+        } else {
             // Check config setting first to see if it can register automatically or not
             if (config('ShieldOAuthConfig')->oauthConfigs[$oauthName]['allow_register'] === false) {
                 return redirect()->to(config('Auth')->logoutRedirect())->with('error', lang('ShieldOAuthLang.Callback.account_not_found', [$userInfo->email]));
@@ -110,6 +109,10 @@ class OAuthController extends BaseController implements ControllersInterface
             $users->save($user);
             // Add to default group
             $users->addToDefaultGroup($user);
+        }
+
+        if ($this->userExist->isBanned()) {
+            return redirect()->to(config('Auth')->logoutRedirect())->with('error', $this->userExist->getBanMessage() ?? lang('Auth.bannedUser'));
         }
 
         auth()->loginById($userid);
@@ -142,6 +145,8 @@ class OAuthController extends BaseController implements ControllersInterface
         $users = model('ShieldOAuthModel');
         // $find = ['email' => $this->userInfo()->email];
         $findUser = $users->findByCredentials($find);
+
+        $this->userExist = $findUser;
 
         return $findUser !== null;
     }
