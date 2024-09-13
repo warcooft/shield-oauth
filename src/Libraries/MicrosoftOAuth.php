@@ -114,7 +114,7 @@ class MicrosoftOAuth extends AbstractOAuth
      * @param string $nameOfProcess The name of the process, such as 'syncingUserInfo' or 'newUser'.
      * @param object $userInfo      An object containing user information, such as 'givenName', 'surname', and 'mail'.
      *                              This object should be of type `object<string, mixed>`, where the keys represent user attributes.
-     * 
+     *
      * @return array<int|string, mixed> Returns an associative array mapping column names to their corresponding values.
      */
     protected function setColumnsName(string $nameOfProcess, object $userInfo): array
