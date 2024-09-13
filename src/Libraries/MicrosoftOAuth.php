@@ -12,11 +12,10 @@ use Exception;
 
 class MicrosoftOAuth extends AbstractOAuth
 {
-    private static $API_CODE_URL      = 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize';
-    private static $API_TOKEN_URL     = 'https://login.microsoftonline.com/common/oauth2/v2.0/token';
-    private static $API_USER_INFO_URL = 'https://graph.microsoft.com/v1.0/me';
-    private static $APPLICATION_NAME  = 'ShieldOAuth';
-
+    private static string $API_CODE_URL      = 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize';
+    private static string $API_TOKEN_URL     = 'https://login.microsoftonline.com/common/oauth2/v2.0/token';
+    private static string $API_USER_INFO_URL = 'https://graph.microsoft.com/v1.0/me';
+    private static string $APPLICATION_NAME  = 'ShieldOAuth';
     protected string $token;
     protected CURLRequest $client;
     protected ShieldOAuthConfig $config;
@@ -44,12 +43,15 @@ class MicrosoftOAuth extends AbstractOAuth
             'approval_prompt' => 'auto',
             'scope'           => 'User.Read',
             'state'           => $state,
-            'sso_reload'      => true
+            'sso_reload'      => true,
         ]);
 
         return self::$API_CODE_URL . '?' . $query;
     }
 
+    /**
+     * @param array<string, string> $allGet
+     */
     public function fetchAccessTokenWithAuthCode(array $allGet): void
     {
         try {
@@ -108,16 +110,14 @@ class MicrosoftOAuth extends AbstractOAuth
         }
 
         if ($nameOfProcess === 'newUser') {
-            helper('text');
-
             return [
                 'username'                                    => $userInfo->mail,
                 'email'                                       => $userInfo->mail,
-                'password'                                    => random_string('crypto', 32),
+                'password'                                    => bin2hex(random_bytes(16)),
                 'active'                                      => 1, // if microsoft authentication is valid then the user account does not require an email activator
                 $this->config->usersColumnsName['first_name'] => $userInfo->givenName,
                 $this->config->usersColumnsName['last_name']  => $userInfo->surname ?? null,
-                $this->config->usersColumnsName['avatar']     => null
+                $this->config->usersColumnsName['avatar']     => null,
             ];
         }
 
