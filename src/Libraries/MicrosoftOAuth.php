@@ -2,6 +2,15 @@
 
 declare(strict_types=1);
 
+/**
+ * This file is part of Shield OAuth.
+ *
+ * (c) Datamweb <pooya_parsa_dadashi@yahoo.com>
+ *
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
+ */
+
 namespace Datamweb\ShieldOAuth\Libraries;
 
 use CodeIgniter\HTTP\CURLRequest;
@@ -52,7 +61,7 @@ class MicrosoftOAuth extends AbstractOAuth
     /**
      * @param array<string, string> $allGet
      */
-    public function fetchAccessTokenWithAuthCode(array $allGet): void
+    protected function fetchAccessTokenWithAuthCode(array $allGet): void
     {
         try {
             $response = $this->client->request('POST', self::$API_TOKEN_URL, [
@@ -77,7 +86,7 @@ class MicrosoftOAuth extends AbstractOAuth
         $this->setToken($token);
     }
 
-    public function fetchUserInfoWithToken(): object
+    protected function fetchUserInfoWithToken(): object
     {
         try {
             $response = $this->client->request('GET', self::$API_USER_INFO_URL, [
@@ -99,7 +108,16 @@ class MicrosoftOAuth extends AbstractOAuth
         return $userInfo;
     }
 
-    public function setColumnsName(string $nameOfProcess, object $userInfo): array
+    /**
+     * Sets the column names and values based on the process name.
+     *
+     * @param string $nameOfProcess The name of the process, such as 'syncingUserInfo' or 'newUser'.
+     * @param object $userInfo An object containing user information, such as 'givenName', 'surname', and 'mail'.
+     *                         This object should be of type `object<string, mixed>`, where the keys represent user attributes.
+     * 
+     * @return array<int|string, mixed> Returns an associative array mapping column names to their corresponding values.
+     */
+    protected function setColumnsName(string $nameOfProcess, object $userInfo): array
     {
         if ($nameOfProcess === 'syncingUserInfo') {
             return [
