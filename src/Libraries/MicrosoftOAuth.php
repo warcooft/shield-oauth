@@ -123,7 +123,7 @@ class MicrosoftOAuth extends AbstractOAuth
             return [
                 $this->config->usersColumnsName['first_name'] => $userInfo->givenName,
                 $this->config->usersColumnsName['last_name']  => $userInfo->surname ?? null,
-                $this->config->usersColumnsName['avatar']     => null,
+                // $this->config->usersColumnsName['avatar']     => null,
             ];
         }
 
