@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace Datamweb\ShieldOAuth\Controllers;
 
-use Throwable;
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\RedirectResponse;
 use CodeIgniter\Shield\Entities\User;
 use CodeIgniter\Shield\Models\LoginModel;
 use Datamweb\ShieldOAuth\Libraries\Basic\ControllersInterface;
+use Throwable;
 
 class OAuthController extends BaseController implements ControllersInterface
 {
