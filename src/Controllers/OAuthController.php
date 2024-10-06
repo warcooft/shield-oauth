@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Datamweb\ShieldOAuth\Controllers;
 
+use Throwable;
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\RedirectResponse;
 use CodeIgniter\Shield\Entities\User;
@@ -108,8 +109,8 @@ class OAuthController extends BaseController implements ControllersInterface
 
             try {
                 $userid = $users->insert($entitiesUser);
-            } catch (\Throwable $th) {
-                //If the insert fails due to a duplicate key entry, see the log message for audit.
+            } catch (Throwable $th) {
+                // If the insert fails due to a duplicate key entry, see the log message for audit.
                 return redirect()->to(config('Auth')->logoutRedirect())->with('error', lang('ShieldOAuthLang.Callback.account_disabled'));
             }
 
